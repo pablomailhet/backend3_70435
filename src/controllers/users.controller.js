@@ -6,7 +6,7 @@ import createMockUser from "../helpers/mocks/users.mock.js";
 
 export const getUsers = async (req, res) => {
     try {
-        const users = await userModel.find();
+        const users = await userModel.find().select('-password');
         res.status(200).json({ status: "success", users });
     }
     catch (error) {
