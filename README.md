@@ -37,7 +37,7 @@
 
 ### Users
 
-- Crear 10 usuarios usando mocks
+- Crear 10 usuarios usando mocks, el password por defecto es coder1234
   ```
   http://localhost:8080/api/mocks/users/10
   ```
@@ -68,7 +68,7 @@
   ```
     {
     	"email": "email@dom.com",
-    	"password": "coder123"
+    	"password": "coder1234"
     }
   ```
 
