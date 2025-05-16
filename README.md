@@ -1,0 +1,104 @@
+# Documentation
+
+## Instalacion y ejecucion
+
+### Clonar repositorio
+
+- Obtener codigo fuente
+  ```
+  git clone https://github.com/pablomailhet/backend3_70435.git
+  ```
+
+- Acceder a la carpeta
+  ```
+  cd backend3_70435
+  ```
+
+- Instalar dependencias npm
+  ```
+  npm install
+  ```
+
+### Iniciar el servidor
+
+- Iniciar el servidor como dev, antes se deben copiar las variables de entornos.
+  ```
+  npm run dev
+  ```
+
+## Mocks
+
+### Products
+
+- Crear 100 productos usando mocks
+  ```
+  http://localhost:8080/api/mocks/products/100
+  ```
+
+### Users
+
+- Crear 10 usuarios usando mocks
+  ```
+  http://localhost:8080/api/mocks/users/10
+  ```
+
+## API
+
+### Products
+
+- Obtener todos los productos
+  ```
+  http://localhost:8080/api/products
+  ```
+
+### Users
+
+- Obtener todos los usuarios, requiere login con rol admin
+  ```
+  http://localhost:8080/api/users/
+  ```
+
+### Login
+
+- Para hacer un login se debe usar el metodo POST de la siguiente ruta:
+  ```
+  http://localhost:8080/api/sessions/login
+  ```
+- Enviar por body en formato JSON lo siguiente
+  ```
+    {
+    	"email": "email@dom.com",
+    	"password": "coder123"
+    }
+  ```
+
+## Docker
+
+### Build image
+
+- Crear la imagen con el siguiente comando
+  ```
+  docker build -t pmcommerce70435 .
+  ```
+
+### Run image
+
+- Ejecutar la imagen con el siguiente comando
+  ```
+  docker run -p 3000:9000 pmcommerce70435
+  ```
+
+## DockerHub
+
+### Pull image
+
+- Obtener la imagen desde dockerhub
+  ```
+  docker pull pablomailhet/pmcommerce70435:1.0.0
+  ```
+### Run image
+
+- Ejecutar la imagen de dockerhub
+  ```
+  docker run -p 3000:9000 pablomailhet/pmcommerce70435:1.0.0
+  ```
