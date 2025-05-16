@@ -24,7 +24,7 @@ const createMockProduct = () => {
     ];
     const title = faker.commerce.productName();
     const description = faker.commerce.productDescription();
-    const code = "cod" + Number.parseInt(faker.commerce.price({ min: 10, max: 2000 }));
+    const code = "cod" + Number.parseInt(faker.commerce.price({ min: 1, max: 100000 }));
     const price = Number.parseInt(faker.commerce.price({ min: 10, max: 2000 }));
     const stock = faker.number.int({ min: 1, max: 1000 });
     const category = categories[faker.number.int({ min: 0, max: 15 })];

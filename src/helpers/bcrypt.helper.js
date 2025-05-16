@@ -1,7 +1,7 @@
 import { genSaltSync, hashSync, compareSync } from "bcrypt";
 
 const hashPassword = (password) => {
-    const salt = genSaltSync(5);
+    const salt = genSaltSync(parseInt(process.env.SALT));
     return hashSync(password, salt);
 }
 
