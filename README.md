@@ -21,9 +21,11 @@
 
 ### Iniciar el servidor
 
-- Iniciar el servidor como dev, antes se deben copiar las variables de entornos.
+- Iniciar el servidor, antes se deben copiar las variables de entornos.
   ```
   npm run dev
+  npm run test
+  npm start
   ```
 
 ## Mocks
