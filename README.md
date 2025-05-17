@@ -19,12 +19,18 @@
   npm install
   ```
 
-### Iniciar el servidor
+### Iniciar el servidor, antes debe copiar las variables de entornos.
 
-- Iniciar el servidor, antes se deben copiar las variables de entornos.
+- Iniciar el servidor modo dev
   ```
   npm run dev
+  ```
+- Iniciar el servidor modo test
+  ```
   npm run test
+  ```
+- Iniciar el servidor modo prod
+  ```
   npm start
   ```
 
