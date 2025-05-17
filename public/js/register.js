@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }).showToast();
                     setTimeout(() => {
                         window.location.href = `${window.location.origin}/api/sessions/viewlogin`
-                    }, 3000);
+                    }, 1000);
                 }
                 else {
                     console.log(data);
