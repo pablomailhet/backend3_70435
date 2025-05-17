@@ -50,9 +50,14 @@ const initializatePassword = (req, res, next) => {
 
             const user = await userModel.findOne({ email: username });
 
+            if (!user) {
+                return done(null, false);
+            }
+
             if (validatePassword(password, user?.password)) {
                 return done(null, user);
-            } else {
+            }
+            else {
                 return done(null, false);
             }
 
