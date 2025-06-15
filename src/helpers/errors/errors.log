@@ -1,1 +1,17 @@
 [31mERROR[39m: bad auth : Authentication failed.
+[31mERROR[39m: The `uri` parameter to `openUri()` must be a string, got "undefined". Make sure the first parameter to `mongoose.connect()` or `mongoose.createConnection()` is a string.
+[31mERROR[39m: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+[31mERROR[39m: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+[31mERROR[39m: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+[31mERROR[39m: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+[31mERROR[39m: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+[31mERROR[39m: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+[31mERROR[39m: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+[31mERROR[39m: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+[31mERROR[39m: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+[31mERROR[39m: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+[31mERROR[39m: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+[31mERROR[39m: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+[31mERROR[39m: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+[31mERROR[39m: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"
+[31mERROR[39m: Cast to ObjectId failed for value "undefined" (type string) at path "_id" for model "users"

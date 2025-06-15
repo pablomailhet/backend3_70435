@@ -19,17 +19,6 @@ export const getCart = async (req, res) => {
     }
 }
 
-export const createCart = async (req, res) => {
-    try {
-        let cart = req.body;
-        const newCart = await cartModel.create(cart);
-        res.status(201).json({ status: "success", message: "Cart added", cart: newCart });
-    }
-    catch (error) {
-        res.status(500).json({ status: "error", message: error.message });
-    }
-}
-
 export const insertProductCart = async (req, res) => {
     try {
         const { cid, pid } = req.params;

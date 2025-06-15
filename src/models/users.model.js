@@ -52,6 +52,19 @@ userSchema.post("save", async function (userCreated) {
     }
 })
 
+userSchema.pre("findOneAndDelete", async function (next) {
+    try {
+        const user = await this.model.findOne(this.getFilter());
+        if (user && user.cart) {
+            await cartModel.findByIdAndDelete(user.cart);
+        }
+        next();
+    } catch (error) {
+        logger.ERROR(error.message);
+        next(error);
+    }
+});
+
 const userModel = model(userCollection, userSchema);
 
 export default userModel;

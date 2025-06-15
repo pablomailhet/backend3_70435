@@ -80,7 +80,7 @@ const initializatePassword = (req, res, next) => {
                     first_name: profile._json.name,
                     last_name: " ",
                     email: email,
-                    password: hashPassword("coder123"),
+                    password: hashPassword("coder1234"),
                     age: 18
                 })
             }

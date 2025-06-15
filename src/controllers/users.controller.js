@@ -40,7 +40,11 @@ export const createUser = async (req, res) => {
 
         const user = await userModel.create({ first_name, last_name, email, password, age });
 
-        res.status(201).json({ status: "success", message: "User added", user: user });
+        const newUser = user.toObject();
+
+        delete newUser.password;
+
+        res.status(201).json({ status: "success", message: "User added", user: newUser });
 
     }
     catch (error) {
@@ -84,7 +88,11 @@ export const updateUser = async (req, res) => {
             return res.status(404).json({ status: "error", message: "User not found." });
         }
 
-        res.status(200).json({ status: "success", message: "User updated", user });
+        const newUser = user.toObject();
+
+        delete newUser.password;
+
+        res.status(200).json({ status: "success", message: "User updated", user: newUser });
 
     }
     catch (error) {

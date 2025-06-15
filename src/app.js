@@ -17,10 +17,8 @@ import logger from "./helpers/logger.helper.js";
 
 import passport from 'passport';
 import initializatePassword from './middlewares/passport.middleware.js';
-import { create } from "express-handlebars";
 
 const PORT = process.env.PORT || 9000;
-const handlebars = create();
 
 const cookieSecret = process.env.cookieSecret;
 const sessionSecret = process.env.sessionSecret;
@@ -50,9 +48,6 @@ app.use(initializatePassword);
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.engine("handlebars", handlebars.engine);
-app.set("view engine", "handlebars");
-app.set("views", "src/views");
 app.use(express.static("public"));
 
 app.use("/", indexRouter);
