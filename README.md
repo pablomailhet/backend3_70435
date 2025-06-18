@@ -50,36 +50,6 @@
   http://localhost:8080/api/mocks/users/10
   ```
 
-## API
-
-### Products
-
-- Obtener todos los productos
-  ```
-  http://localhost:8080/api/products
-  ```
-
-### Users
-
-- Obtener todos los usuarios, requiere login con rol admin
-  ```
-  http://localhost:8080/api/users/
-  ```
-
-### Login
-
-- Para hacer un login se debe usar el metodo POST de la siguiente ruta:
-  ```
-  http://localhost:8080/api/sessions/login
-  ```
-- Enviar por body en formato JSON lo siguiente
-  ```
-    {
-    	"email": "email@dom.com",
-    	"password": "coder1234"
-    }
-  ```
-
 ## Docker
 
 ### Build image
