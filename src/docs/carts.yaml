@@ -1,0 +1,362 @@
+components:
+  schemas:
+    Cart:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID del carrito
+          example: "6827f517e40c1a024b964f18"
+        products:
+          type: array
+          description: Lista de productos en el carrito
+          items:
+            type: object
+            properties:
+              product:
+                type: string
+                description: ID del producto
+                example: "60f7b2b4e8f0c842d8d8e8a2"
+              quantity:
+                type: integer
+                minimum: 1
+                description: Cantidad del producto
+                example: 2
+
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: coderSession         
+
+  responses:
+    error400:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Error de validacion
+    error401:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Usuario no autenticado
+    error403:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Usuario no autorizado
+    error404:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Object not found.
+    error500:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Internal error         
+
+paths:
+  /api/carts/{cid}:
+    get:
+      summary: Obtener un carrito por ID
+      tags: 
+        - Carts
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Carrito encontrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  cart:
+                    $ref: '#/components/schemas/Cart'
+        404:
+          description: Carrito no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error404'
+        500:
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error500'
+
+    delete:
+      summary: Vaciar el carrito
+      tags:
+        - Carts
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Todos los productos eliminados del carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: All products deleted from cart
+                  cart:
+                    $ref: '#/components/schemas/Cart'
+        404:
+          description: Carrito no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error404'
+        500:
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error500'
+
+  /api/carts/{cid}/products/{pid}:
+    post:
+      summary: Agregar un producto al carrito
+      tags: 
+        - Carts
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                quantity:
+                  type: integer
+                  minimum: 1
+                  example: 2
+      responses:
+        201:
+          description: Producto agregado al carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Product added in cart
+        404:
+          description: Carrito o producto no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error404'
+        400:
+          description: Cantidad inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error400'
+        500:
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error500'
+
+    delete:
+      summary: Eliminar un producto del carrito
+      tags: 
+        - Carts
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Producto eliminado del carrito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Product deleted from cart
+                  cart:
+                    $ref: '#/components/schemas/Cart'
+        404:
+          description: Carrito no encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error404'
+        500:
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error500'
+
+  /api/carts/{cid}/purchase:
+    post:
+      summary: Finalizar compra del carrito
+      tags:
+        - Carts
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: cid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Compra realizada exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  ticket:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        example: a8f7bcbc-e223-45fb-8e42-6a89c9b98fd4
+                      amount:
+                        type: number
+                        example: 2999.99
+                      purchaser:
+                        type: string
+                        example: juan.perez@coder.com
+                      products:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            product:
+                              type: string
+                              description: ID del producto
+                              example: "60f7b2b4e8f0c842d8d8e8a2"
+                            quantity:
+                              type: integer
+                              minimum: 1
+                              description: Cantidad del producto
+                              example: 2  
+        400:
+          description: Productos sin stock
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: error
+                  message:
+                    type: string
+                    example: Productos sin stock
+                  prodSinStock:
+                    type: array
+                    items:
+                      type: string
+                      example: 6827f517e40c1a024b964f18
+        404:
+          description: Carrito no encontrado o vacío
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error404'
+        500:
+          description: Error del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error500'        

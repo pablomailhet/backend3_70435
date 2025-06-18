@@ -1,0 +1,368 @@
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        first_name:
+          description: Nombre del usuario
+          type: string
+        last_name:
+          description: Apellido del usuario
+          type: string          
+        email:
+          description: Correo electronico del usuario
+          type: string
+          format: email
+        password:
+          description: Contraseña para iniciar sesión del usuario
+          type: string
+        age:
+          description: Edad del usuario
+          type: number
+        rol:
+          description: Rol que ocupa el usuario en el servidor
+          type: string
+      example:
+        first_name: Juan
+        last_name: Perez
+        email: jperez@coder.com
+        password: coder1234
+        age: 30
+        rol: user
+  
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: coderSession
+
+  responses:
+    error400:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Error de validacion
+    error401:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Usuario no autenticado
+    error403:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Usuario no autorizado
+    error404:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: User not found.
+    error500:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Internal error
+
+paths:
+  /api/users:
+    get:
+      summary: Obtiene todos los usuarios
+      tags:
+        - User
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Lista de usuarios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+        401:
+          description: Usuario no autenticado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error401'
+        403:
+          description: Usuario no autorizado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error403'                
+        500:
+          description: Internal error
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error500'
+    post:
+      summary: Crea un usuario en la base de datos
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      security:
+        - cookieAuth: []
+      responses:
+        201:
+          description: Crea un usuario
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    description: Estado de la operacion
+                    type: string
+                    example: success
+                  message:
+                    description: Mensaje de la operacion
+                    type: string
+                    example: User added
+                  user:
+                    $ref: '#/components/schemas/User'
+        400:
+          description: Error de validacion
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error400'                    
+        401:
+          description: Usuario no autenticado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error401'
+        403:
+          description: Usuario no autorizado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error403'                
+        500:
+          description: Internal error
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error500'                    
+
+  /api/users/{id}:
+
+    get:
+      summary: Obtiene un usuario de la base de datos
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Obtiene un usuario
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    description: Estado de la operacion
+                    type: string
+                    example: success
+                  user:
+                    $ref: '#/components/schemas/User'
+        401:
+          description: Usuario no autenticado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error401'
+        403:
+          description: Usuario no autorizado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error403'                                    
+        404:
+          description: User not found.
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error404'
+        500:
+          description: Internal error
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error500'                
+
+    put:
+      summary: Actualiza un usuario de la base de datos
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string    
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      security:
+        - cookieAuth: []   
+      responses:
+        200:
+          description: Obtiene un usuario
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    description: Estado de la operacion
+                    type: string
+                    example: success
+                  message:
+                    description: Mensaje de la operacion
+                    type: string
+                    example: User updated
+                  user:
+                    $ref: '#/components/schemas/User'
+        400:
+          description: Error de validacion
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error400'                    
+        401:
+          description: Usuario no autenticado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error401'  
+        403:
+          description: Usuario no autorizado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error403'  
+        404:
+          description: User not found.
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error404'
+        500:
+          description: Internal error
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error500'        
+
+    delete:
+      summary: Elimina un usuario de la base de datos
+      tags:
+        - User
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - cookieAuth: []            
+      responses:
+        200:
+          description: Elimina un usuario
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    description: Estado de la operacion
+                    type: string
+                    example: success
+                  message:
+                    description: Mensaje de la operacion
+                    type: string
+                    example: User deleted
+        401:
+          description: Usuario no autenticado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error401' 
+        403:
+          description: Usuario no autorizado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error403'                                   
+        404:
+          description: User not found.
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error404'
+        500:
+          description: Internal error
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error500'   

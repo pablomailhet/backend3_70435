@@ -1,0 +1,401 @@
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        title:
+          description: Titulo del producto
+          type: string
+        description:
+          description: Descripcion del producto
+          type: string
+        code:
+          description: Codigo unico del producto
+          type: string
+        price:
+          description: Precio del producto
+          type: number
+        status:
+          description: Estado del producto activo/inactivo
+          type: boolean
+        stock:
+          description: Cantidad de unidades del producto
+          type: number       
+        category:
+          description: Categoria del proudcto
+          type: string
+        thumbnails:
+          description: Imágenes del producto
+          type: array
+          items:
+            type: string
+      example:
+        title: Producto 01
+        description: Descripcion Producto 01
+        code: cp01
+        price: 123456
+        status: true
+        stock: 10
+        category: Varios
+        thumbnails:
+          - https://ejemplo.com/imagen1.jpg
+          - https://ejemplo.com/imagen2.jpg
+  
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: coderSession
+
+  responses:
+    error400:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Error de validacion
+    error401:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Usuario no autenticado
+    error403:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Usuario no autorizado
+    error404:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Product not found.
+    error500:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Internal error
+
+paths:
+  /api/products:
+    get:
+      summary: Obtiene todos los productos
+      tags:
+        - Product
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Lista de productos paginada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    description: Estado de la operacion
+                    type: string
+                    example: success
+                  products:
+                    description: Productos paginados
+                    type: object
+                    properties:
+                      docs:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Product'
+                      totalDocs:
+                        type: integer
+                      limit:
+                        type: integer
+                      totalPages:
+                        type: integer
+                      page:
+                        type: integer
+                      pagingCounter:
+                        type: integer
+                      hasPrevPage:
+                        type: boolean
+                      hasNextPage:
+                        type: boolean
+                      prevPage:
+                        type: integer
+                        nullable: true
+                      nextPage:
+                        type: integer
+                        nullable: true
+                      pageNumbers:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            number:
+                              type: integer
+                            isCurrent:
+                              type: boolean
+        401:
+          description: Usuario no autenticado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error401'
+        500:
+          description: Internal error
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error500'
+    post:
+      summary: Crea un producto en la base de datos
+      tags:
+        - Product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      security:
+        - cookieAuth: []
+      responses:
+        201:
+          description: Crea un producto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    description: Estado de la operacion
+                    type: string
+                    example: success
+                  message:
+                    description: Mensaje de la operacion
+                    type: string
+                    example: Product added
+                  product:
+                    $ref: '#/components/schemas/Product'
+        400:
+          description: Error de validacion
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error400'                    
+        401:
+          description: Usuario no autenticado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error401'
+        403:
+          description: Usuario no autorizado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error403'                
+        500:
+          description: Internal error
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error500'                    
+
+  /api/products/{id}:
+
+    get:
+      summary: Obtiene un producto de la base de datos
+      tags:
+        - Product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Obtiene un producto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    description: Estado de la operacion
+                    type: string
+                    example: success
+                  product:
+                    $ref: '#/components/schemas/Product'
+        401:
+          description: Usuario no autenticado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error401'                    
+        404:
+          description: Product not found.
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error404'
+        500:
+          description: Internal error
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error500'                
+
+    put:
+      summary: Actualiza un producto de la base de datos
+      tags:
+        - Product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string    
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      security:
+        - cookieAuth: []   
+      responses:
+        200:
+          description: Obtiene un producto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    description: Estado de la operacion
+                    type: string
+                    example: success
+                  message:
+                    description: Mensaje de la operacion
+                    type: string
+                    example: Product updated
+                  product:
+                    $ref: '#/components/schemas/Product'
+        400:
+          description: Error de validacion
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error400'                    
+        401:
+          description: Usuario no autenticado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error401'  
+        403:
+          description: Usuario no autorizado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error403'  
+        404:
+          description: Product not found.
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error404'
+        500:
+          description: Internal error
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error500'        
+
+    delete:
+      summary: Elimina un producto de la base de datos
+      tags:
+        - Product
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      security:
+        - cookieAuth: []            
+      responses:
+        200:
+          description: Obtiene un producto
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    description: Estado de la operacion
+                    type: string
+                    example: success
+                  message:
+                    description: Mensaje de la operacion
+                    type: string
+                    example: Product deleted
+        401:
+          description: Usuario no autenticado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error401' 
+        403:
+          description: Usuario no autorizado
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error403'                                   
+        404:
+          description: Product not found.
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error404'
+        500:
+          description: Internal error
+          content:
+            application/json:
+              schema:          
+                $ref: '#/components/responses/error500'   

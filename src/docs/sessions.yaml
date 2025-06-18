@@ -1,0 +1,309 @@
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        first_name:
+          description: Nombre del usuario
+          type: string
+        last_name:
+          description: Apellido del usuario
+          type: string          
+        email:
+          description: Correo electronico del usuario
+          type: string
+          format: email
+        password:
+          description: Contraseña para iniciar sesión del usuario
+          type: string
+        age:
+          description: Edad del usuario
+          type: number
+        rol:
+          description: Rol que ocupa el usuario en el servidor
+          type: string
+      example:
+        first_name: Juan
+        last_name: Perez
+        email: jperez@coder.com
+        password: coder1234
+        age: 30
+        rol: user
+  responses:
+    error400:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Bad Request
+    error401:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Credenciales inválidas
+    error403:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Forbidden
+    error409:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: El valor del campo email ya existe
+    error500:
+      type: object
+      properties:
+        status:
+          description: Estado de la operación
+          type: string
+        message:
+          description: Mensaje de error de la operación
+          type: string
+      example:
+        status: error
+        message: Internal error
+paths:
+
+  /api/sessions/register:
+    post:
+      summary: Registra un nuevo usuario en el sistema
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - first_name
+                - last_name
+                - email
+                - password
+              properties:
+                first_name:
+                  type: string
+                  description: Nombre del usuario
+                last_name:
+                  type: string
+                  description: Apellido del usuario
+                email:
+                  type: string
+                  format: email
+                  description: Correo electrónico del usuario
+                password:
+                  type: string
+                  description: Contraseña del usuario
+              example:
+                first_name: Juan
+                last_name: Perez
+                email: juan.perez@coder.com
+                password: coder1234
+      responses:
+        201:
+          description: Usuario registrado exitosamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: User added
+                  _id:
+                    type: string
+                    example: 6827f517e40c1a024b964f16
+        400:
+          description: Datos incompletos o inválidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error400'
+        409:
+          description: Datos duplicados
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error409'
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error500'
+
+  /api/sessions/login:
+    post:
+      summary: Inicia la sesión de un usuario, guardando el token en una cookie coderSession
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  description: Correo electronico del usuario
+                  type: string
+                  format: email
+                password:
+                  description: Contraseña para iniciar sesión del usuario
+                  type: string
+              example:
+                email: admin@coder.com
+                password: coder1234
+      responses:
+        200:
+          description: Exito en el inicio de sesión
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    description: Estado de la operacion
+                    type: string
+                  message:
+                    description: Mensaje de la operación
+                    type: string
+                example:
+                  status: success
+                  message: Usuario logueado correctamente
+        400:
+          description: Falta de algún dato válido para el inicio de sesión
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error400'
+        401:
+          description: Credenciales inválidas para el inicio de sesión
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error401'
+        500:
+          description: Error del lado del servidor al iniciar sesión
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error500'
+
+  /api/sessions/current:
+    get:
+      summary: Obtiene los datos del usuario autenticado
+      tags:
+        - Sessions
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Usuario autenticado con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  user:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: 6827f517e40c1a024b964f16
+                      first_name:
+                        type: string
+                        example: Jakayla
+                      last_name:
+                        type: string
+                        example: Connelly
+                      age:
+                        type: integer
+                        example: 39
+                      email:
+                        type: string
+                        format: email
+                        example: jakayla.connelly@coder.com
+                      rol:
+                        type: string
+                        example: admin
+        401:
+          description: No autorizado. Token inválido o ausente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error401'
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error500'
+
+  /api/sessions/logout:
+    get:
+      summary: Cierra la sesión del usuario eliminando la cookie de autenticación
+      tags:
+        - Sessions
+      security:
+        - cookieAuth: []
+      responses:
+        200:
+          description: Sesión cerrada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Sesión cerrada correctamente
+        401:
+          description: No autorizado. Token inválido o ausente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error401'
+        500:
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/responses/error500'

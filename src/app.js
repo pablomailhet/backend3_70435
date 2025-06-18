@@ -4,8 +4,8 @@ import session from "express-session";
 import cookieParser from "cookie-parser";
 import compression from "express-compression";
 
-import cluster from "cluster";
-import { cpus } from "os";
+import { serve, setup } from "swagger-ui-express";
+import swaggerSpecs from "./helpers/swagger.helper.js";
 
 import { connectDB, sessionStore } from "./helpers/db.helper.js";
 import indexRouter from "./routes/index.router.js";
@@ -49,6 +49,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(express.static("public"));
+
+app.use("/api/docs", serve, setup(swaggerSpecs));
 
 app.use("/", indexRouter);
 app.use(errorHandler);

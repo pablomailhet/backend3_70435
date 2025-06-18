@@ -44,3 +44,22 @@ export const githubLogin = (req, res) => {
         res.status(500).json({ status: "error", message: error.message });
     }
 }
+
+export const current = (req, res) => {
+    res.status(200).json({
+        status: "success",
+        user: req.user
+    });
+}
+
+export const logout = (req, res) => {
+    res.clearCookie('coderSession', {
+        httpOnly: true,
+        secure: false,
+        sameSite: 'strict' // o 'lax' dependiendo de tu configuración
+    });
+    return res.status(200).json({
+        status: 'success',
+        message: 'Sesión cerrada correctamente'
+    });
+};
