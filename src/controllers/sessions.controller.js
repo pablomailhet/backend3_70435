@@ -1,5 +1,7 @@
 import { generateToken } from '../helpers/jwt.helper.js';
 
+import userModel from "../models/users.model.js";
+
 export const login = async (req, res) => {
     try {
 
@@ -45,11 +47,27 @@ export const githubLogin = (req, res) => {
     }
 }
 
-export const current = (req, res) => {
-    res.status(200).json({
-        status: "success",
-        user: req.user
-    });
+export const current = async (req, res) => {
+
+    try {
+
+        const user = await userModel.findById(req.user._id).select('-password');
+
+        if (!user) {
+            return res.status(401).json({ status: "error", message: "Credenciales inválidas" });
+        }
+
+        res.status(200).json({
+            status: "success",
+            user: user
+        });
+
+    }
+    catch (error) {
+        res.status(500).json({ status: "error", message: error.message });
+    }
+
+
 }
 
 export const logout = (req, res) => {

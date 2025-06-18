@@ -22,6 +22,10 @@ components:
         rol:
           description: Rol que ocupa el usuario en el servidor
           type: string
+        cart:
+          description: ID del carrito asignado al usuario
+          type: string
+          format: uuid          
       example:
         first_name: Juan
         last_name: Perez
@@ -29,6 +33,7 @@ components:
         password: coder1234
         age: 30
         rol: user
+        cart: 60f6c0a3e8153e1f3c8a9f4c
   responses:
     error400:
       type: object
@@ -261,6 +266,10 @@ paths:
                       rol:
                         type: string
                         example: admin
+                      cart:
+                        type: string
+                        format: uuid
+                        example: 60f6c0a3e8153e1f3c8a9f4c                        
         401:
           description: No autorizado. Token inválido o ausente.
           content:
